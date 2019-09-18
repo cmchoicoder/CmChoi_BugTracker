@@ -1,0 +1,80 @@
+﻿@model CmChoi_BugTracker.Models.Ticket
+
+
+
+
+<style>
+    .panel-body {
+        color: #ffffff !important;
+        background: radial-gradient(#d8d8d8, transparent) !important;
+    }
+   
+     h2 {
+        color: #0a0a0a;
+    }
+    .fa-bug {
+        font-size: 15px;
+        color: #df5db7;
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-md-3">
+        <h2>Assign Ticket</h2>
+        @if (User.IsInRole("Admin"))
+        {
+            @Html.ActionLink("Back to List", "Index", "Tickets", null, new { style = "color:white; font-size:13px;" })
+        }
+        @if (User.IsInRole("Submitter") || User.IsInRole("Developer") || User.IsInRole("ProjectManager"))
+        {
+            @Html.ActionLink("Back to List", "MyIndex", "Tickets", null, new { style = "color:white; font-size:13px;" })
+        }
+    </div>
+</div>
+<br/>
+<br />
+<br />
+<div class="row">
+
+
+    <div class="col-md-offset-2 col-md-8">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+
+            
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            <section class="@*panel*@ panel-featured panel-featured-warning">
+                <header class="panel-heading">
+                    <div class="panel-actions">
+                        <i class="fa fa-bug"></i>
+                        @*<a href="#" class="fa fa-caret-down"></a>
+                        <a href="#" class="fa fa-times"></a>*@
+                    </div>
+                    <h2 class="panel-title">Assign Ticket</h2>
+                </header>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table @*table-bordered*@ table-striped mb-none">
+                            <tr class="form-group">
+                                @Html.LabelFor(model => model.AssignedToUserId, "Assign Ticket To User", htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.DropDownList("AssignedToUserId", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.AssignedToUserId, "", new { @class = "text-danger" })
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <br/>
+
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <input type="submit" class="btn-xs btn-warning" value="Send" />
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

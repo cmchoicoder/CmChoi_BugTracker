@@ -1,0 +1,99 @@
+﻿@model IEnumerable<CmChoi_BugTracker.Models.TicketNotification>
+
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    table td {
+        white-space: pre-wrap;
+        padding: 0px 0px;
+    }
+
+       
+    .panel-body {
+        color: #ffffff !important;
+        background: radial-gradient(#d8d8d8, transparent) !important;
+    }
+    .fa-envelope{
+        font-size:15px;
+        color:#df5db7;
+   
+</style>
+<h2>Notifications</h2>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+
+<section class="@*panel*@ panel-featured panel-featured-info">
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <i class="fa fa-envelope"></i>
+            @*<a href="#" class="fa fa-caret-down"></a>
+            <a href="#" class="fa fa-times"></a>*@
+        </div>
+
+        <h2 class="panel-title">Ticket Notifications</h2>
+    </header>
+    <div class="panel-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped mb-none" id="datatable-tabletools" @*data-swf-path="~/assets/vendor/jquery-datatables/extras/TableTools/swf/copy_csv_xls_pdf.swf"*@>
+                <thead>
+                    <tr>
+                        <th>
+                            Recipient
+                        </th>
+                        <th>
+                            Sender
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Created)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Subject)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NotificationBody)
+                        </th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="gradeX">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Recipient.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sender.FullName)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Created)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Subject)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NotificationBody)
+                            </td>
+
+                            <td>
+                                
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) 
+                                @*@Html.ActionLink("Details", "Details", new { id = item.Id }) |*@
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</section>

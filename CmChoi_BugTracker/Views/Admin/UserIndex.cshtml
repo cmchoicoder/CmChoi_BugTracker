@@ -1,0 +1,127 @@
+﻿
+@using CmChoi_BugTracker.Models
+@using CmChoi_BugTracker.Helpers
+@model IEnumerable<UserProfileViewModel>
+
+@{
+    ViewBag.Title = "UserIndex";
+    var roleHelper = new UserRolesHelper();
+}
+
+
+
+<style>
+ .avatar {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+    .fa-caret-down{
+        background-color:green;
+        
+        margin-left:auto;
+        margin-right:auto;
+        width: 10px;
+        height:10px;
+        border-radius:50%;
+    }
+    .panel-body {
+        color: #ffffff !important;
+        background: radial-gradient(#d8d8d8, transparent) !important;
+    }
+    .fa-user{
+        color:#df5db7;
+        font-size:15px;
+    }
+</style>
+
+
+
+
+<div class="row">
+    
+    <div class="col-md-11">
+
+        <section class="@*panel*@ panel-featured panel-featured-warning">
+            <header class="panel-heading">
+                <div class="panel-actions">
+                    <i class="fa fa-user"></i>
+                    @*<a href="#" class="fa fa-caret-down"></a>
+                    <a href="#" class="fa fa-times"></a>*@
+                </div>
+
+                <h2 class="panel-title">User Index</h2>
+            </header>
+            <div class="panel-body">
+                <table class="table table-bordered table-striped mb-none" id="datatable-tabletools" @*data-swf-path="~/assets/vendor/jquery-datatables/extras/TableTools/swf/copy_csv_xls_pdf.swf"*@>
+                    <thead>
+                        <tr>
+
+                            <th>
+                                @Html.DisplayName("Avatar")
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Email)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FirstName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.LastName)
+                            </th>
+                            <th>
+                                @Html.DisplayName("Role")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Manage Others")
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td class="avatar">
+                                    @if (!string.IsNullOrEmpty(user.AvatarUrl))
+                                    {
+                                        <img src="@Url.Content(user.AvatarUrl)" class="img-responsive avatar" />
+                                    }
+                                    else
+                                    {
+                                        <img src="@Url.Content("~/Uploads/man avatar.jpg")" class="img-responsive avatar" />
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => user.Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => user.FirstName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => user.LastName)
+                                </td>
+                                <td>
+                                    @roleHelper.ListUserRoles(user.Id).FirstOrDefault()
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Assign Role", "ManageUserRole", "Admin", new { userId = user.Id }, null) |
+                                    @Html.ActionLink("Assign Projects", "ManageUserProjects", "Admin", new { userid = user.Id }, null)
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+   <div class="col-md-1"></div>
+</div>
+
+
+
+

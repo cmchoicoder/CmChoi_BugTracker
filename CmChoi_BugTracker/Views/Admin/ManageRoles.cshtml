@@ -1,0 +1,108 @@
+﻿@using CmChoi_BugTracker.Models
+@using CmChoi_BugTracker.Helpers
+
+@model IEnumerable<UserProfileViewModel>
+
+@{
+    ViewBag.Title = "ManageRoles";
+    var roleHelper = new UserRolesHelper();
+}
+<style>
+   .panel-body {
+        color: #ffffff !important;
+        background: radial-gradient(#d8d8d8, transparent) !important;
+    }
+   .backTo {
+        color: white;
+    }
+
+    h2 {
+        color: #0a0a0a;
+        font-weight: 700;
+        margin-top: 0px;
+    }
+    .fa-user{
+        color:#df5db7;
+        font-size:15px;
+    }
+</style>
+
+<div class="row">
+    <h2>Manage Roles For Multiple Users</h2>
+     @Html.ActionLink("Black To User Indext", "UserIndex", "Admin", new {@class="backTo"})
+</div>
+
+<br />
+<br />
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-offset-1 col-md-6">
+            @Html.ListBox("Users", null, htmlAttributes: new { @class = "form-control", @style = "height:150;" })
+        </div>
+        <div class="col-md-offset-1 col-md-3">
+            @Html.DropDownList("RoleName", null, "--Select Role--", htmlAttributes: new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-1 col-md-6">
+            <input type="submit" value="Assign" class="btn btn-xs btn-warning" />
+        </div>
+    </div>
+}
+
+
+<br/>
+
+<section class="@*panel*@ panel-featured panel-featured-warning padSize">
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <i class="fa fa-user"></i>
+            @*<a href="#" class="fa fa-caret-down"></a>
+            <a href="#" class="fa fa-times"></a>*@
+        </div>
+
+        <h2 class="panel-title">User Index</h2>
+    </header>
+    <div class="panel-body">
+        <table class="table table-bordered table-striped mb-none" id="datatable-tabletools" data-swf-path="~/assets/vendor/jquery-datatables/extras/TableTools/swf/copy_csv_xls_pdf.swf">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LastName)
+                    </th>
+                    <th>
+                        @Html.DisplayName("Role")
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.LastName)
+                        </td>
+                        <td>
+                            @roleHelper.ListUserRoles(user.Id).FirstOrDefault()
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>

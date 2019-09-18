@@ -1,0 +1,204 @@
+﻿@using CmChoi_BugTracker.Helpers;
+@model CmChoi_BugTracker.Models.Project
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<style>
+    .panel-body {
+        /*color: #ffffff !important;
+        background: radial-gradient(#d8d8d8, transparent) !important;*/
+    }
+
+    a {
+        color: white;
+    }
+
+    h2 {
+        color: #0a0a0a;
+    }
+</style>
+
+
+
+<h2>Project Details and User Assignment</h2>
+<div>
+    @*@if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) <p style="display:inline-block;">|</p>
+    }*@
+    @if (User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Back to List", "Index") <p style="display:inline-block;">|</p>
+    }
+    
+    @Html.ActionLink("Back to My List", "MyIndex")
+</div>
+<br />
+<br />
+<div>
+    <section class="@*panel*@ panel-featured panel-featured-warning">
+        <header class="panel-heading">
+            <div class="panel-actions">
+                @*<a href="#" class="fa fa-caret-down"></a>
+                <a href="#" class="fa fa-times"></a>*@
+            </div>
+            <h2 class="panel-title">Project Details</h2>
+        </header>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table @*table-bordered*@ table-striped mb-none">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="gradeX">
+                            <td>
+                                @Html.DisplayFor(model => model.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Created)
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    
+</div>
+<br />
+<br />
+<br />
+@using (Html.BeginForm("ManageProjectUsers", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("ProjectId", Model.Id)
+    <div class="row">
+        <div class="col-md-4">
+            <section class="panel panel-featured panel-featured-info">
+                <header class="panel-heading">
+                    <div class="panel-actions">
+                        <a href="#" class="fa fa-caret-down"></a>
+                        <a href="#" class="fa fa-times"></a>
+                    </div>
+                    <h2 class="panel-title">Project Maganers Assignment</h2>
+                </header>
+                <div class="panel-body">
+                    @*<div class="table-responsive">*@
+                    <table class="@*table*@ table-responsive @*table-bordered*@ table-striped mb-none">
+                        <thead>
+                            <tr>
+
+                                <th>
+                                    Project Managers
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+
+                                <td>
+                                    @Html.ListBox("ProjectManagers")
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    @*</div>*@
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-4">
+            <section class="panel panel-featured panel-featured-info">
+                <header class="panel-heading">
+                    <div class="panel-actions">
+                        <a href="#" class="fa fa-caret-down"></a>
+                        <a href="#" class="fa fa-times"></a>
+                    </div>
+                    <h2 class="panel-title">Developers Assignment</h2>
+                </header>
+                <div class="panel-body">
+                    @*<div class="table-responsive">*@
+                    <table class="@*table*@ @*table-bordered*@ table-responsive table-striped mb-none">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Developers
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>
+                                    @Html.ListBox("Developers")
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    @*</div>*@
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-4">
+
+            <section class="panel panel-featured panel-featured-info">
+                <header class="panel-heading">
+                    <div class="panel-actions">
+                        <a href="#" class="fa fa-caret-down"></a>
+                        <a href="#" class="fa fa-times"></a>
+                    </div>
+                    <h2 class="panel-title">Submitters Assignment</h2>
+                </header>
+                <div class="panel-body">
+                    @*<div class="table-responsive">*@
+                    <table class="@*table*@ @*table-bordered*@ table-responsive table-striped mb-none">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Submitters
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>
+                                    @Html.ListBox("Submitters")
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    @*</div>*@
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <input type="submit" value="Assign" class="btn-xs btn-warning" />
+        </div>
+    </div>
+}

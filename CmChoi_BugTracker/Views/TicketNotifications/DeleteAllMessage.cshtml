@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewBag.Title = "DeleteAllMessage";
+}
+
+
+
+<style>
+    .panel-body {
+        /*color: #ffffff !important;*/
+        /*background: radial-gradient(#ffffff, transparent) !important;*/
+        border-left: 2px solid #dafff9;
+    }
+
+    h2, h3 {
+        color: #0a0a0a;
+    }
+
+    a {
+        color: white;
+    }
+
+    body {
+        font-size: 14px !important;
+    }
+
+    .fa.fa-envelope:before {
+        font-size: 50px;
+    }
+    dd{
+        font-size:20px;
+    }
+</style>
+<div class="raw">
+    <div class="col-md-offset-1">
+
+
+        <h2>Are you sure you want to delete all notifications?</h2>
+        @Html.ActionLink("Back to List", "Index","TicketNotifications")
+    </div>
+</div>
+
+<br />
+<br />
+<br />
+
+
+<div class="row">
+    <div class="col-md-offset-3 col-md-5">
+        <div class="row">
+            <div class="panel-body">
+                <div class="raw">
+                    <i class="fa fa-envelope block"></i>
+                </div>
+
+                <div class="raw">
+                    <dl class="dl-horizontal">
+                        <dt>
+                          
+                        </dt>
+
+                        <dd>
+                         ALL NOTIFICATIONS!!
+                        </dd>
+                    </dl>
+
+
+                </div>
+            </div>
+            <div class="widget-stats bg-pink">
+                <div class="stats-link">
+                    <a href="#"><i class="fa fa-dot-circle-o"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<br />
+
+<div class="row">
+    <div class="col-md-offset-1">
+
+
+        @using (Html.BeginForm("DeleteAll", "TicketNotifications"))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn-xs btn-warning" />
+
+            </div>
+        }
+    </div>
+</div>

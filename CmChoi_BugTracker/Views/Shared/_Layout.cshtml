@@ -1,0 +1,694 @@
+﻿@using Microsoft.AspNet.Identity
+@using CmChoi_BugTracker.Models
+@using CmChoi_BugTracker.Helpers
+
+@{
+    var userId = User.Identity.GetUserId();
+    var db = new ApplicationDbContext();
+    ApplicationUser user = new ApplicationUser();
+    string cUserRole = string.Empty;
+    if (!string.IsNullOrEmpty(userId))
+    {
+        user = db.Users.Find(userId);
+        UserRolesHelper roleHelper = new UserRolesHelper();
+        cUserRole = roleHelper.ListUserRoles(userId).FirstOrDefault();
+    }
+}
+
+<html class="fixed">
+<head>
+
+    <!-- Basic -->
+    <meta charset="UTF-8">
+
+    <title>@ViewBag.Title | CMC BugTracker</title>
+    <meta name="keywords" content="HTML5 Admin Template" />
+    <meta name="description" content="JSOFT Admin - Responsive HTML5 Template">
+    <meta name="author" content="JSOFT.net">
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!-- Web Fonts  -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
+    <!--My Favicon-->
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" href="~/assets/vendor/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/assets/vendor/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="~/assets/vendor/magnific-popup/magnific-popup.css" />
+    <link rel="stylesheet" href="~/assets/vendor/bootstrap-datepicker/css/datepicker3.css" />
+
+    <!-- Specific Page Vendor CSS -->
+    <link rel="stylesheet" href="~/assets/vendor/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.custom.css" />
+    <link rel="stylesheet" href="~/assets/vendor/bootstrap-multiselect/bootstrap-multiselect.css" />
+    <link rel="stylesheet" href="~/assets/vendor/morris/morris.css" />
+    <link rel="stylesheet" href="~/assets/vendor/select2/select2.css" />
+    <link rel="stylesheet" href="~/assets/vendor/jquery-datatables-bs3/assets/css/datatables.css" />
+    <!--Liquid water charts-->
+    
+  
+    
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="~/assets/stylesheets/theme.css" />
+
+    <!-- Skin CSS -->
+    <link rel="stylesheet" href="~/assets/stylesheets/skins/default.css" />
+
+    <!-- Theme Custom CSS -->
+    <link rel="stylesheet" href="~/assets/stylesheets/theme-custom.css">
+    <link href="~/Content/style.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
+
+    <!-- Data Table CSS-->
+    <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+
+    <!--Favicon-->
+    @*<link rel="shortcut icon" href=".ico" />
+        <link rel="apple-touch-icon" href=".png" />
+        <link rel="icon" sizes="192x192" href=".png" />*@
+
+    <style>
+        #datatable-tabletools_filter {
+            margin-right: 10px;
+            width: 40%;
+        }
+
+            #datatable-tabletools_filter input {
+                display: inline-block;
+                width: 60%;
+            }
+
+        div.panel-body {
+            overflow: auto;
+        }
+
+        .inner-wrapper {
+            background: #333 url('/Images/wood4.jpg') no-repeat repeat center center;
+            background-size: cover;
+            height: auto;
+            color: #fff;
+        }
+
+        .content {
+            margin-left: 0px !important;
+            /*white-space:pre-wrap;*/
+        }
+
+        .fa-caret-down {
+            color: orange !important;
+        }
+
+        .fa-times {
+            color: orchid !important;
+        }
+
+        .myName {
+            color: black;
+            font-size: 17px;
+        }
+
+        .myCmc {
+            color: saddlebrown;
+            font-weight: 800;
+        }
+        .dotIcon:before {
+           
+            border: 5px solid #03a9f4;
+            border-radius: 100px;
+            content: '';
+            display: inline-block;
+            left: 40px;
+            margin: -5px 0 0;
+            position: absolute;
+            top: 50%;
+            z-index: 999;
+        }
+        .dotChildIcon:before {
+           
+            border: 5px solid #03a9f4;
+            border-radius: 100px;
+            content: '';
+            display: inline-block;
+            left: 40px;
+            margin: -5px 0 0;
+            position: absolute;
+            top: 50%;
+            z-index: 999;
+        }
+        .fa-circle:before {
+            font-size: 10px;
+            color: #4e57ce;
+        }
+        i.fa.fa-circle{
+            margin: 0px!important;
+        }
+        .fa-circleChild:before{
+            font-size: 8px;
+            color:#b58c11;
+        }
+        .moveLeftA{
+            padding:6px 15px 6px 35px!important;
+        }
+
+    </style>
+
+    <!-- Head Libs -->
+    <script src="~/assets/vendor/modernizr/modernizr.js"></script>
+</head>
+
+<body>
+    <section class="body">
+
+        <!-- start: header -->
+        <header class="header">
+            <div class="logo-container">
+                <a href="#" class="logo">
+                    <img src="~/Images/tools-logo.png" height="35" alt="logo" /><span class="myName"><b class="myCmc"> CMC</b>BugTracker</span>
+                </a>
+                <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
+                    <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+                </div>
+            </div>
+
+            <!-- start: search & user box -->
+            <div class="header-right">
+                <ul class="notifications">
+
+                    <li>
+                        <a href="#" class="dropdown-toggle notification-icon" data-toggle="dropdown">
+                            <i class="fa fa-envelope"></i>
+                            <span class="badge">@NotificationHelper.GetNewUserNotificationCount()</span>
+                        </a>
+
+                        <div class="dropdown-menu notification-menu">
+                            <div class="notification-title">
+                                <span class="pull-right label label-default">@NotificationHelper.GetAllUserNotificationCount()</span>
+                                Notifications
+                            </div>
+
+                            <div class="content">
+                                <ul>
+                                    @foreach (var notification in NotificationHelper.GetUnreadUserNotifications().ToList())
+                                    {
+                                        <li>
+                                            @using (Html.BeginForm("MarkAsRead", "TicketNotifications"))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                @Html.Hidden("Id", notification.Id)
+
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <figure class="image">
+                                                            <img src="@notification.Sender.AvatarUrl" alt="@notification.Sender.Email" class="img-circle" width="25" />
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        <span class="title">@notification.Subject</span>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <span class="message text-justify"><b>@notification.NotificationBody</b></span>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-12 text-center">
+                                                        <button type="submit" class="btn btn-xs btn-success">Mark as read</button>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </li>
+                                    }
+
+                                </ul>
+
+                                <hr />
+
+                                <div class="text-right">
+                                    <a href="@Url.Action("MyNotifications", "TicketNotifications")" class="view-more">View All</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-toggle notification-icon" data-toggle="dropdown">
+                            <i class="fa fa-bell"></i>
+                            <span class="badge">3</span>
+                        </a>
+
+                        <div class="dropdown-menu notification-menu">
+                            <div class="notification-title">
+                                <span class="pull-right label label-default">3</span>
+                                Alerts
+                            </div>
+
+                            <div class="content">
+                                <ul>
+                                    <li>
+                                        <a href="#" class="clearfix">
+                                            <div class="image">
+                                                <i class="fa fa-thumbs-down bg-danger"></i>
+                                            </div>
+                                            <span class="title">Server is Down!</span>
+                                            <span class="message">Just now</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="clearfix">
+                                            <div class="image">
+                                                <i class="fa fa-lock bg-warning"></i>
+                                            </div>
+                                            <span class="title">User Locked</span>
+                                            <span class="message">15 minutes ago</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="clearfix">
+                                            <div class="image">
+                                                <i class="fa fa-signal bg-success"></i>
+                                            </div>
+                                            <span class="title">Connection Restaured</span>
+                                            <span class="message">10/10/2014</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <hr />
+
+                                <div class="text-right">
+                                    <a href="#" class="view-more">View All</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <span class="separator"></span>
+
+
+
+                <div id="userbox" class="userbox">
+
+                    @if (user != null)
+                    {
+                        if (!string.IsNullOrEmpty(user.AvatarUrl))
+                        {
+                            <a href="#" data-toggle="dropdown">
+                                <figure class="profile-picture">
+                                    <img src="@Url.Content(user.AvatarUrl)" alt="@user.FullName" class="img-circle" data-lock-picture="@Url.Content(user.AvatarUrl)" />
+                                </figure>
+                                <div class="profile-info" data-lock-name="Caleb Choi" data-lock-email="cmchoi.coder@gmail.com">
+                                    <span class="name">
+                                        @Html.DisplayFor(m => user.FullName)
+                                    </span>
+                                    <span class="role">@cUserRole</span>
+                                </div>
+
+                                <i class="fa custom-caret"></i>
+                            </a>
+                            <div class="dropdown-menu">
+                                @*<ul class="list-unstyled">
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a role="menuitem" tabindex="-1" href="@Url.Action("EditProfile", "Members")"><i class="fa fa-user"></i> My Profile</a>
+                                        </li>
+                                        <li>
+                                            <a role="menuitem" tabindex="-1" href="#" data-lock-screen="true"><i class="fa fa-lock"></i> Lock Screen</a>
+                                        </li>
+                                        <li>
+                                            <a role="menuitem" tabindex="-1" href="pages-signin.html"><i class="fa fa-power-off"></i> Logout</a>
+                                        </li>
+                                    </ul>*@
+                                @Html.Partial("_LoginPartial")
+                            </div>
+                        }
+                    }
+
+                </div>
+            </div>
+            <!-- end: search & user box -->
+        </header>
+        <!-- end: header -->
+
+        <div class="inner-wrapper">
+            <!-- start: sidebar -->
+            <aside id="sidebar-left" class="sidebar-left">
+
+                <!--start: hambermenubar-->
+                <div class="sidebar-header">
+                    <div class="sidebar-title">
+
+                    </div>
+                    <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html" data-fire-event="sidebar-left-toggle">
+                        <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+                    </div>
+                </div>
+                <!--End:hambermenubar-->
+
+
+                <div class="nano">
+                    <div class="nano-content">
+                        <nav id="menu" class="nav-main" role="navigation">
+                            <ul class="nav nav-main">
+                                <li class="nav">
+                                    <a href="@Url.Action("Dashboard", "Home")">
+                                        <i class="fa fa-home" aria-hidden="true"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li class="nav-parent">
+                                        <a>
+                                            <i class="fa fa-users"></i>
+                                            <span>User Administration</span>
+                                        </a>
+                                        <ul class="nav nav-children list-unstyled m-none">
+                                            <li>
+                                                <a class="moveLeftA" href="@Url.Action("UserIndex", "Admin")">
+                                                    <i class="fa fa-circle"></i>
+                                                    <span>User Index</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="moveLeftA" href="@Url.Action("ManageRoles", "Admin")">
+                                                    <i class="fa fa-circle"></i>
+                                                    <span>Manage Roles</span>
+                                                </a>
+                                            </li>
+                                            @*<li>
+                                                <a href="@Url.Action("ManageUsers", "Admin")">
+                                                    <i class="fa fa-user"></i>
+                                                    <span>Manage Users</span>
+                                                </a>
+                                            </li>*@
+                                            @*<li>
+                                                <a href="@Url.Action("ManageProjects", "Admin", new { userId = User.Identity.GetUserId() })">
+                                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                                    <span>Manage Projects</span>
+                                                </a>
+                                            </li>*@
+                                        </ul>
+                                    </li>
+                                }
+                                    <li class="nav-parent">
+                                        <a>
+                                            <i class="fa fa-laptop"></i>
+                                            <span>Project Management</span>
+                                        </a>
+                                        <ul class="nav nav-children list-unstyled m-none">
+
+                                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                                            {
+                                                <li>
+                                                    <a class="moveLeftA" href="@Url.Action("Index", "Projects")">
+                                                        <i class="fa fa-circle"></i>
+                                                        <span>All Projects</span>
+                                                    </a>
+                                                </li>
+                                            }
+
+                                            @if (User.IsInRole("Submitter") || User.IsInRole("Admin") || User.IsInRole("Developer") || User.IsInRole("ProjectManager"))
+                                            {
+                                                <li>
+                                                    <a class="moveLeftA" href="@Url.Action("MyIndex", "Projects")">
+                                                        <i class="fa fa-circle"></i>
+                                                        <span>My Projects</span>
+                                                    </a>
+                                                </li>
+                                            }
+
+                                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                                            {
+                                                <li>
+                                                    <a class="moveLeftA" href="@Url.Action("Create", "Projects")">
+                                                        <i class="fa fa-circle"></i>
+                                                        <span>Create One</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+
+
+                                    @if (User.IsInRole("Submitter") || User.IsInRole("Developer") || User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                                    {
+                                        <li class="nav-parent">
+                                            <a>
+                                                <i class="fa fa-th-large"></i>
+                                                <span>Ticket Management</span>
+                                            </a>
+                                            <ul class="nav nav-children list-unstyled m-none">
+
+                                                @if (User.IsInRole("Admin"))
+                                                {
+                                                    <li>
+                                                        <a class="moveLeftA" href="@Url.Action("Index", "Tickets")">
+                                                            <i class="fa fa-circle"></i>
+                                                            <span>All Tickets</span>
+                                                        </a>
+                                                    </li>
+                                                }
+                                                <li>
+                                                    <a class="moveLeftA" href="@Url.Action("MyIndex", "Tickets")">
+                                                        <i class="fa fa-circle"></i>
+                                                        <span>My Tickets</span>
+                                                    </a>
+                                                </li>
+
+                                                @if (User.IsInRole("Submitter"))
+                                                {
+                                                    <li>
+                                                        <a class="moveLeftA" href="@Url.Action("Create", "Tickets")">
+                                                            <i class="fa fa-circle"></i>
+                                                            <span>Create One</span>
+                                                        </a>
+                                                    </li>
+                                                }
+
+                                                @*Admin specific links*@
+                                                @if (User.IsInRole("Admin"))
+                                                {
+
+                                                    <li class="nav-parent">
+                                                        <a class="moveLeftA">
+                                                            <i class="fa fa-circle"></i>
+                                                            <span>Properties</span>
+                                                        </a>
+                                                        <ul class="nav nav-children list-unstyled m-none">
+                                                            <li>
+                                                                <a href="@Url.Action("Index", "TicketPriorities")">
+                                                                    <i class="fa fa-circle fa-circleChild"></i>
+                                                                    <span>Priorities</span>
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="@Url.Action("Index", "TicketStatus")">
+                                                                    <i class="fa fa-circle fa-circleChild"></i>
+                                                                    <span>Statuses</span>
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="@Url.Action("Index", "TicketTypes")">
+                                                                    <i class="fa fa-circle fa-circleChild"></i>
+                                                                    <span>Types</span>
+                                                                </a>
+                                                            </li>
+
+                                                        </ul>
+                                                    </li>
+                                                }
+
+                                                @if (User.IsInRole("Submitter") || User.IsInRole("Developer") || User.IsInRole("ProjectManager"))
+                                                {
+                                                    <li>
+                                                        <a class="moveLeftA" href="@Url.Action("MyNotifications", "TicketNotifications")">
+                                                            <i class="fa fa-circle"></i>
+                                                            <span>My Notifications</span>
+                                                        </a>
+                                                    </li>
+                                                }
+
+                                                @if (User.IsInRole("Admin"))
+                                                {
+                                                    <li class="nav-parent">
+                                                        <a class="moveLeftA">
+                                                            <i class="fa fa-circle"></i>
+                                                            <span>Notifications</span>
+                                                        </a>
+                                                        <ul class="nav nav-children list-unstyled m-none">
+                                                            <li>
+                                                                <a href="@Url.Action("Index", "TicketNotifications")">
+                                                                    <i class="fa fa-circle fa-circleChild"></i>
+                                                                    <span>All Notifications</span>
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="@Url.Action("MyNotifications", "TicketNotifications")">
+                                                                    <i class="fa fa-circle fa-circleChild"></i>
+                                                                    <span>My Notifications</span>
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="@Url.Action("DeleteAllMessage", "TicketNotifications")">
+                                                                    <i class="fa fa-circle fa-circleChild"></i>
+                                                                    <span>Delete All</span>
+                                                                </a>
+                                                            </li>
+
+                                                        </ul>
+                                                    </li>
+                                                }
+                                                @if (User.IsInRole("Admin"))
+                                                {
+                                                    <li>
+                                                        <a class="moveLeftA" href="@Url.Action("Index", "TicketHistories")">
+                                                            <i class="fa fa-circle"></i>
+                                                            <span>All Histories</span>
+                                                        </a>
+                                                    </li>
+                                                }
+
+                                                @*@if (User.IsInRole("Submitter") || User.IsInRole("Developer") || User.IsInRole("ProjectManager"))
+                                                {
+
+                                                    <li>
+                                                        <a class="moveLeftA" href="@Url.Action("Index", "TicketHistories")">
+                                                            <i class="fa fa-circle"></i>
+                                                            <span>My Histories</span>
+                                                        </a>
+                                                    </li>
+                                                }*@
+
+                                                
+
+                                            </ul>
+                                        </li>
+                                    }
+
+                                </ul>
+                        </nav>
+                    </div>
+                </div>
+            </aside>
+            <!-- end: sidebar -->
+
+            <section role="main" class="content-body" id="ticketBg">
+
+                @*Begin: Banner
+                    <header class="page-header">
+
+                        <div class="right-wrapper pull-right mr-lg">
+                            <div class="col-lg-8"></div>
+                            <div class="col-lg-4">
+                                <form action="pages-search-results.html" class="search nav-form mt-sm">
+                                    <div class="input-group input-search">
+                                        <input type="text" class="form-control" name="q" id="q" placeholder="Search...">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                            <ul class="row breadcrumbs">
+                                   <li class="col-lg-11">
+                                       @Html.Partial("_LoginPartial")
+                                   </li>
+                                   <li class="col-lg-1 location-center">
+                                   </li>
+
+                                </ul>
+                        </div>
+                    </header>*@
+                <!--End: Banner-->
+
+
+
+                @RenderBody()
+
+
+            </section>
+        </div>
+    </section>
+
+    <!-- Vendor -->
+    <script src="~/assets/vendor/jquery/jquery.js"></script>
+    <script src="~/assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js"></script>
+    <script src="~/assets/vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="~/assets/vendor/nanoscroller/nanoscroller.js"></script>
+    <script src="~/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/assets/vendor/magnific-popup/magnific-popup.js"></script>
+    <script src="~/assets/vendor/jquery-placeholder/jquery.placeholder.js"></script>
+
+    <!-- Specific Page Vendor -->
+    <script src="~/assets/vendor/jquery-ui/js/jquery-ui-1.10.4.custom.js"></script>
+    <script src="~/assets/vendor/jquery-ui-touch-punch/jquery.ui.touch-punch.js"></script>
+    <script src="~/assets/vendor/jquery-appear/jquery.appear.js"></script>
+    <script src="~/assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
+    <script src="~/assets/vendor/jquery-easypiechart/jquery.easypiechart.js"></script>
+    <script src="~/assets/vendor/flot/jquery.flot.js"></script>
+    <script src="~/assets/vendor/flot-tooltip/jquery.flot.tooltip.js"></script>
+    <script src="~/assets/vendor/flot/jquery.flot.pie.js"></script>
+    <script src="~/assets/vendor/flot/jquery.flot.categories.js"></script>
+    <script src="~/assets/vendor/flot/jquery.flot.resize.js"></script>
+    <script src="~/assets/vendor/jquery-sparkline/jquery.sparkline.js"></script>
+    <script src="~/assets/vendor/raphael/raphael.js"></script>
+    <script src="~/assets/vendor/morris/morris.js"></script>
+    <script src="~/assets/vendor/gauge/gauge.js"></script>
+    <script src="~/assets/vendor/snap-svg/snap.svg.js"></script>
+    <script src="~/assets/vendor/liquid-meter/liquid.meter.js"></script>
+    <script src="~/assets/vendor/jqvmap/jquery.vmap.js"></script>
+    <script src="~/assets/vendor/jqvmap/data/jquery.vmap.sampledata.js"></script>
+    <script src="~/assets/vendor/jqvmap/maps/jquery.vmap.world.js"></script>
+    <script src="~/assets/vendor/jqvmap/maps/continents/jquery.vmap.africa.js"></script>
+    <script src="~/assets/vendor/jqvmap/maps/continents/jquery.vmap.asia.js"></script>
+    <script src="~/assets/vendor/jqvmap/maps/continents/jquery.vmap.australia.js"></script>
+    <script src="~/assets/vendor/jqvmap/maps/continents/jquery.vmap.europe.js"></script>
+    <script src="~/assets/vendor/jqvmap/maps/continents/jquery.vmap.north-america.js"></script>
+    <script src="~/assets/vendor/jqvmap/maps/continents/jquery.vmap.south-america.js"></script>
+    <script src="~/assets/vendor/select2/select2.js"></script>
+   
+    @*<script src="~/assets/vendor/jquery-datatables/media/js/jquery.dataTables.js"></script>*@
+    @*<script src="~/assets/vendor/jquery-datatables/extras/TableTools/js/dataTables.tableTools.min.js"></script>*@
+    @*<script src="~/assets/vendor/jquery-datatables-bs3/assets/js/datatables.js"></script>*@
+    <!-- Theme Base, Components and Settings -->
+    <script src="~/assets/javascripts/theme.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <!-- Theme Custom -->
+    <script src="~/assets/javascripts/theme.custom.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+
+    <!-- Theme Initialization Files -->
+    <script src="~/assets/javascripts/theme.init.js"></script>
+
+
+    <!-- Examples -->
+    <script src="~/assets/javascripts/tables/examples.datatables.default.js"></script>
+    <script src="~/assets/javascripts/tables/examples.datatables.row.with.details.js"></script>
+    <script src="~/assets/javascripts/tables/examples.datatables.tabletools.js"></script>
+    <script src="~/assets/javascripts/dashboard/examples.dashboard.js"></script>
+    <script src="~/assets/javascripts/ui-elements/examples.charts.js"></script>
+    <!-- FusionCharts -->
+    <!-- jQuery -->
+    @*<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>*@
+    <!-- FusionCharts -->
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+    <!-- jQuery-FusionCharts -->
+    <script type="text/javascript" src="https://rawgit.com/fusioncharts/fusioncharts-jquery-plugin/develop/dist/fusioncharts.jqueryplugin.min.js"></script>
+    <!-- Fusion Theme -->
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+
+
+
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

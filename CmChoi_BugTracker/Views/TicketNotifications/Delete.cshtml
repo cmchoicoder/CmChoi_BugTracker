@@ -1,0 +1,215 @@
+﻿@model CmChoi_BugTracker.Models.TicketNotification
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+@*<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>TicketNotification</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Recipient.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Recipient.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sender.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sender.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ticket.OwnerUserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ticket.OwnerUserId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Created)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Subject)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Subject)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NotificationBody)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NotificationBody)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Read)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Read)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>*@
+
+
+<style>
+    .panel-body {
+        /*color: #ffffff !important;*/
+        /*background: radial-gradient(#ffffff, transparent) !important;*/
+        border-left: 2px solid #dafff9;
+    }
+
+    h2, h3 {
+        color: #0a0a0a;
+    }
+
+    a{
+        color:white;
+    }
+    body {
+        font-size: 14px !important;
+    }
+    .fa.fa-envelope:before{
+        font-size:50px;
+    }
+</style>
+<div class="raw">
+    <div class="col-md-offset-1">
+
+
+        <h2>Are you sure you want to delete this notification?</h2>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+
+<br />
+<br />
+<br />
+
+
+<div class="row">
+    <div class="col-md-offset-3 col-md-5">
+        <div class="row">
+            <div class="panel-body">
+                <div class="raw">
+                    <i class="fa fa-envelope block"></i>
+                </div>
+
+                <div class="raw">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Recipient.FirstName)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Recipient.FirstName)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Sender.FirstName)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Sender.FirstName)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Ticket.OwnerUserId)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Ticket.OwnerUserId)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Created)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Created)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Subject)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Subject)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.NotificationBody)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.NotificationBody)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Read)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Read)
+                        </dd>
+
+                    </dl>
+
+
+                </div>
+            </div>
+            <div class="widget-stats bg-pink">
+                <div class="stats-link">
+                    <a href="#"><i class="fa fa-dot-circle-o"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<br />
+
+<div class="row">
+    <div class="col-md-offset-1">
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn-xs btn-warning" />
+
+            </div>
+        }
+    </div>
+</div>

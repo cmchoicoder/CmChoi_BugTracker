@@ -1,0 +1,95 @@
+﻿@model IEnumerable<CmChoi_BugTracker.Models.TicketHistory>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+    <style>
+        .panel-body {
+            color: #ffffff !important;
+            background: radial-gradient(#d8d8d8, transparent) !important;
+        }
+        h2 {
+        color: #0a0a0a;
+        }
+        .fa-header {
+            font-size: 15px;
+            color: #df5db7;
+        }
+    </style>
+
+<h2>All Histories</h2>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+
+
+
+<section class="@*panel*@ panel-featured panel-featured-info">
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <i class="fa fa-header"></i>
+            @*<a href="#" class="fa fa-caret-down"></a>
+            <a href="#" class="fa fa-times"></a>*@
+        </div>
+
+        <h2 class="panel-title">Ticket Histories</h2>
+    </header>
+    <div class="panel-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped mb-none" id="datatable-tabletools" data-swf-path="~/assets/vendor/jquery-datatables/extras/TableTools/swf/copy_csv_xls_pdf.swf">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.User.FullName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PropertyName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.OldValue)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NewValue)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Updated)
+                        </th>
+                        @*<th></th>*@
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr class="gradeX">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PropertyName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OldValue)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NewValue)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updated)
+                        </td>
+                        @*<td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        </td>*@
+                    </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</section>

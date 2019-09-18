@@ -1,0 +1,82 @@
+﻿@model CmChoi_BugTracker.Models.Project
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+    label {
+        color: #8bff8a !important;
+    }
+
+    body {
+        font-size: 15px;
+    }
+
+    a {
+        color: white;
+    }
+
+    h2 {
+        color: #0a0a0a;
+    }
+
+    .content-body {
+        padding: 1px 200px 70px 100px !important;
+    }
+</style>
+
+
+<h2>Create New Project</h2>
+<div>
+    @Html.ActionLink("Back To List", "Index", "Projects")
+</div>
+
+<br/>
+<br/>
+<br/>
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+
+                <div class="box-body">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Create" class="btn-xs btn-warning" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

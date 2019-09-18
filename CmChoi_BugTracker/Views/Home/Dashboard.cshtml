@@ -1,0 +1,374 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+
+<style>
+    .panel-body {
+        color: #ffffff !important;
+        background: radial-gradient(#ffffff, transparent) !important;
+        border-left: 1px solid #dafff9;
+    }
+
+    h5 {
+        font-weight: 600;
+        color: black;
+    }
+
+    p {
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .chartHeight {
+        height: 400px;
+        width: 100%;
+    }
+
+    h3 {
+        margin-top: 0px;
+        color: black;
+        font-weight:800;
+    }
+</style>
+
+
+
+<body>
+    <h3>Dashboard</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="row">
+                <div class="panel-body">
+                    <div class="stats-icon"><i class="fa fa-ticket pull-right"></i></div>
+                    <div class="stats-info">
+                        <h5>TOTAL TICKETS</h5>
+                        <p>@ViewBag.TotalTicketNumber</p>
+                    </div>
+                </div>
+                <div class="widget-stats bg-pink">
+                    <div class="stats-link">
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a href="/Tickets/Index">View Detail <i class="fa fa-caret-right"></i></a>
+                        }
+                        else
+                        {
+                            <a href="/Tickets/MyIndex">View Detail <i class="fa fa-caret-right"></i></a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+
+            <div class="row">
+                <div class="panel-body">
+                    <div class="stats-icon"><i class="fa fa-exclamation-triangle pull-right"></i></div>
+                    <div class="stats-info">
+                        <h5>TOTAL IMMEDIATE TICKETS</h5>
+                        <p>@ViewBag.ImmediateTicketNumber</p>
+                    </div>
+                </div>
+                <div class="widget-stats bg-orange">
+                    <div class="stats-link">
+                        <a href="@Url.Action("MyIndex","Tickets",new { req = "Immediate" })">View Detail <i class="fa fa-caret-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="row">
+                <div class="panel-body">
+                    <div class="stats-icon"><i class="fa fa-clock-o pull-right"></i></div>
+                    <div class="stats-info">
+                        <h5>RECENT TICKETS (PAST 24 HRS)</h5>
+                        <p>@ViewBag.RecentTicketNumber</p>
+                    </div>
+                </div>
+                <div class="widget-stats bg-black-lighter">
+                    <div class="stats-link">
+                        <a href="@Url.Action("MyIndex","Tickets", new { req = "Recent" })">View Detail <i class="fa fa-caret-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+
+    <!--START: Fusion 3D Chart-->
+    <div class="row">
+
+        <div class="col-md-6">
+            <section class="panel panel-dark">
+                <header class="panel-heading">
+                    <div class="panel-actions">
+                        <a href="#" class="fa fa-caret-down"></a>
+                        <a href="#" class="fa fa-times"></a>
+                    </div>
+
+                    <h2 class="panel-title">Ticket Counts by Type</h2>
+
+                </header>
+                <div class="panel-body">
+                    <div id="RealFusion3DBarChart" class="col-md-6 chartHeight"></div>
+                </div>
+            </section>
+        </div>
+
+
+        <div class="col-md-6">
+            <section class="panel panel-dark">
+                <header class="panel-heading">
+                    <div class="panel-actions">
+                        <a href="#" class="fa fa-caret-down"></a>
+                        <a href="#" class="fa fa-times"></a>
+                    </div>
+
+                    <h2 class="panel-title">Ticket Counts by Status</h2>
+                </header>
+                <div class="panel-body">
+                    <div id="Fusion3dPieChart" class="col-md-6 chartHeight"></div>
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+    <br />
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <section class="panel panel-dark">
+                <header class="panel-heading">
+                    <div class="panel-actions">
+                        <a href="#" class="fa fa-caret-down"></a>
+                        <a href="#" class="fa fa-times"></a>
+                    </div>
+
+                    <h2 class="panel-title">Ticket Counts by Priority</h2>
+
+                </header>
+                <div class="panel-body">
+                    <div id="RealFusion3DBarChart1" class="col-md-6 chartHeight"></div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-6">
+            <section class="panel panel-dark">
+                <header class="panel-heading">
+                    <div class="panel-actions">
+                        <a href="#" class="fa fa-caret-down"></a>
+                        <a href="#" class="fa fa-times"></a>
+                    </div>
+
+                    <h2 class="panel-title">Projects Stats</h2>
+
+                </header>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-none chartHeight">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Project</th>
+                                    <th>Status</th>
+                                    <th>Progress</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Spock Portfolio</td>
+                                    <td><span class="label label-success">Success</span></td>
+                                    <td>
+                                        <div class="progress progress-sm progress-half-rounded m-none mt-xs light">
+                                            <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                                100%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Spock IT Blog</td>
+                                    <td><span class="label label-success">Success</span></td>
+                                    <td>
+                                        <div class="progress progress-sm progress-half-rounded m-none mt-xs light">
+                                            <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                                100%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Spock Bug Tracker</td>
+                                    <td><span class="label label-warning">Warning</span></td>
+                                    <td>
+                                        <div class="progress progress-sm progress-half-rounded m-none mt-xs light">
+                                            <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                                60%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Spock Cash Portal</td>
+                                    <td><span class="label label-success">Success</span></td>
+                                    <td>
+                                        <div class="progress progress-sm progress-half-rounded m-none mt-xs light">
+                                            <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">
+                                                90%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>Spock Budgeter</td>
+                                    <td><span class="label label-warning">Warning</span></td>
+                                    <td>
+                                        <div class="progress progress-sm progress-half-rounded m-none mt-xs light">
+                                            <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 45%;">
+                                                45%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>Spock ChartExercise</td>
+                                    <td><span class="label label-danger">Danger</span></td>
+                                    <td>
+                                        <div class="progress progress-sm progress-half-rounded m-none mt-xs light">
+                                            <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
+                                                40%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+    </div>
+
+
+
+</body>
+
+
+
+
+
+@section scripts{
+    @*<script type="text/javascript">
+            $(function () {
+                $.post('@Url.Action("GetRealMorrisData","Charts")').then(function (response) {
+                    new Morris.Donut({
+                        element: 'RealMorrisDonetChart',
+                        data: response,
+                        gridTextSize: 10,
+                        xkey: 'label',
+                        ykey: ['value'],
+                        labels: ['Ticket Count'],
+                        resize: true
+                    });
+                });
+            });
+        </script>*@
+
+    <script>
+
+    $(function () {
+        var url = '@Url.Action("GetRealFusionDataByType","Charts")';
+
+        $.post(url).then(function (response) {
+            var revenueChart = new FusionCharts({
+                type: "column3d",
+                renderAt: "RealFusion3DBarChart",
+                width: "100%",
+                height: "100%",
+                dataFormat: "json",
+                dataSource: {
+                    "chart": {
+                        caption: "",
+                        subCaption: "",
+                        xAxisName: "Type",
+                        yAxisName: "Count",
+                        numberSuffix: "",
+                        theme: "fusion"
+                    },
+                    "data": response
+                }
+            }).render();
+        });
+    });
+    </script>
+
+    <script>
+
+    $(function () {
+        var url = '@Url.Action("GetRealFusionData","Charts")';
+
+        $.post(url).then(function (response) {
+            var revenueChart = new FusionCharts({
+                type: "pie3d",
+                renderAt: "Fusion3dPieChart",
+                width: "100%",
+                height: "100%",
+                dataFormat: "json",
+                dataSource: {
+                    "chart": {
+                        caption: "",
+                        subCaption: "",
+                        xAxisName: "Status",
+                        yAxisName: "Count",
+                        numberSuffix: "",
+                        theme: "fusion"
+                    },
+                    "data": response
+                }
+            }).render();
+        });
+    });
+    </script>
+
+    <script>
+
+    $(function () {
+        var url = '@Url.Action("GetRealFusionDataByPriority","Charts")';
+
+        $.post(url).then(function (response) {
+            var revenueChart = new FusionCharts({
+                type: "column3d",
+                renderAt: "RealFusion3DBarChart1",
+                width: "100%",
+                height: "100%",
+                dataFormat: "json",
+                dataSource: {
+                    "chart": {
+                        caption: "",
+                        subCaption: "",
+                        xAxisName: "Priority",
+                        yAxisName: "Count",
+                        numberSuffix: "",
+                        theme: "fusion"
+                    },
+                    "data": response
+                }
+            }).render();
+        });
+    });
+    </script>
+}

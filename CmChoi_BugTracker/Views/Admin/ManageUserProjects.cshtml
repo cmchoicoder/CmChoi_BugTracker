@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewBag.Title = "Manage User Projects";
+}
+<style>
+.panel-body {
+        color: #ffffff !important;
+        background: radial-gradient(#d8d8d8, transparent) !important;
+    }
+a {
+        color: white;
+    }
+
+    h2 {
+        color: #0a0a0a;
+    }
+    .fa-user{
+        color:#df5db7;
+        font-size:15px;
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-md-5">
+        <h2>Manage User Projects</h2>
+        @Html.ActionLink("Black To User Indext", "UserIndex", "Admin")
+    </div>
+</div>
+
+<br />
+<br />
+<br />
+
+<div class="row">
+    <div class="col-md-2"></div>
+
+    <div class="col-md-8">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("userId", (string)ViewBag.UserId)
+
+            <section class="@*panel*@ panel-featured panel-featured-warning">
+                <header class="panel-heading">
+                    <div class="panel-actions">
+                        <i class="fa fa-user"></i>
+                        @*<a href="#" class="fa fa-caret-down"></a>
+                        <a href="#" class="fa fa-times"></a>*@
+                    </div>
+                    <h2 class="panel-title">Assign Projects</h2>
+                </header>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-none">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.Label("Assign Projects", null, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr class="gradeX">
+
+                                    <td>
+                                        @Html.ListBox("Projects", null, htmlAttributes: new { @class = "form-control" })
+                                    </td>
+
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <br/>
+            <br/>
+
+            <div class="form-group">
+                <input type="submit" value="Assign" class="btn-xs btn-warning" />
+            </div>
+        }
+    </div>
+</div>
+

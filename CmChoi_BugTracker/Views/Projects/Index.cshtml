@@ -1,0 +1,90 @@
+﻿@model IEnumerable<CmChoi_BugTracker.Models.Project>
+
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .panel-body {
+        color: #ffffff !important;
+        background: radial-gradient(#d8d8d8, transparent) !important;
+    }
+    .fa-bug{
+        font-size:15px;
+        color:#df5db7;
+    }
+</style>
+
+<h2>Projects Index</h2>
+<br />
+<br />
+<br />
+
+
+<section class="@*panel*@ panel-featured panel-featured-warning">
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <i class="fa fa-bug"></i>
+            @*<a href="#" class="fa fa-caret-down"></a>
+                <a href="#" class="fa fa-times"></a>*@
+        </div>
+
+        <h2 class="panel-title">Projects Index</h2>
+    </header>
+    <div class="panel-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped mb-none" id="datatable-tabletools" data-swf-path="~/assets/vendor/jquery-datatables/extras/TableTools/swf/copy_csv_xls_pdf.swf">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Created)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="gradeX">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Created)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</section>
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+<br />
+<br />
+@if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+{
+    <div class="col-md-4">
+        <button type="button" class="btn-xs btn-warning" onclick="location.href='@Url.Action("Create", "Projects")'">
+            Create New
+        </button>
+    </div>
+}

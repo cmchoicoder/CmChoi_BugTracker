@@ -1,0 +1,510 @@
+﻿@using System.IO;
+@using CmChoi_BugTracker.Helpers;
+@using CmChoi_BugTracker.Models;
+@using Microsoft.AspNet.Identity;
+@model CmChoi_BugTracker.Models.Ticket
+
+@*@model IEnumerable<UserProfileViewModel>*@
+
+<style>
+    .cell-fill-input {
+        margin-bottom: 20px;
+        width: 100%;
+        height: 20px;
+        font-weight: bold;
+    }
+
+    .cell-fill-textarea {
+        margin-bottom: 20px;
+        width: 100%;
+        height: 20px;
+        font-weight: bold;
+    }
+
+    .btnPad {
+        margin-top: 20px;
+    }
+
+    .imgsize {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50px;
+    }
+
+    .avatar {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+
+    .TicketHistoriesHeight {
+        overflow: hidden;
+        width: auto;
+        height: 890px;
+    }
+
+    .panel-body {
+        color: #242424;
+        font-size: 13px;
+    }
+
+    .hisBox {
+        padding-left: 50px;
+    }
+
+    .detailsBox {
+        padding-bottom: 20px;
+        padding-top: 20px;
+    }
+
+    .commentPad {
+        padding-right: 0px;
+    }
+
+    thead th {
+        padding-bottom: 0px !important;
+    }
+
+    .fa-caret-down {
+        color: orange !important;
+    }
+
+    .fa-times {
+        color: orchid !important;
+    }
+
+
+    .panel-body {
+        color: #525252 !important;
+        background: radial-gradient(#e6e6e6, transparent) !important;
+    }
+
+    .dashA {
+        color: #538815 !important;
+    }
+
+    span.date {
+        color: #83daff !important;
+    }
+
+    span.time {
+        color: #83daff !important;
+    }
+
+    div.timeline-body {
+        margin-right: 1px !important;
+    }
+    .backTo{
+        color: white;
+        font-size: 20px;
+    }
+    .fa-header {
+        font-size: 15px;
+        color: #df5db7;
+    }
+</style>
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div>
+    @if (User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Back to List", "Index","Tickets",null, new {style="color:white; font-size:15px;"})
+    }
+    @if (User.IsInRole("Submitter") || User.IsInRole("Developer") || User.IsInRole("ProjectManager"))
+    {
+        @Html.ActionLink("Back to List", "MyIndex","Tickets",null, new {style="color:white; font-size:15px;"})
+    }  
+</div>
+<br/>
+<body>
+    <div class="row">
+        <section class="panel panel-featured panel-featured-info">
+            <header class="panel-heading">
+                <div class="panel-actions">
+                    <a href="#" class="fa fa-caret-down"></a>
+                    <a href="#" class="fa fa-times"></a>
+                </div>
+
+                <h2 class="panel-title">Ticket Details</h2>
+            </header>
+            <div class="panel-body detailsBox">
+                <table class="table table-bordered table-striped mb-none">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Title)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                Project
+                            </th>
+                            <th>
+                                Developer
+                            </th>
+                            <th>
+                                Submitter
+                            </th>
+                            <th class="hidden-phone">
+                                Priority
+                            </th>
+
+                            <th class="hidden-phone">
+                                Status
+                            </th>
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </th>
+                            @*<th>
+                                    @Html.DisplayNameFor(model => model.Updated)
+                                </th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="gradeX">
+                            <td>
+                                @Html.DisplayFor(model => model.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Project.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.AssignedToUser.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.OwnerUser.FullName)
+                            </td>
+
+                            <td class="center hidden-phone">
+                                @Html.DisplayFor(model => model.TicketPriority.Name)
+                            </td>
+                            <td class="center hidden-phone">
+                                @Html.DisplayFor(model => model.TicketStatus.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.TicketType.Name)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(model => model.Created)
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(model => model.Updated)
+                                </td>*@
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <!-- Team information-->
+    <div class="row">
+        <div class="col-md-4 commentPad">
+            <div class="row">
+                <section class="panel panel-accordion-dark">
+                    <header class="panel-heading">
+                        <div class="panel-actions">
+                            <a href="#" class="fa fa-caret-down"></a>
+                            <a href="#" class="fa fa-times"></a>
+                        </div>
+
+                        <h2 class="panel-title">Ticket Comment(s)</h2>
+                    </header>
+                    <div class="panel-body">
+                        <div class="row table-responsive">
+                            <div class="col-md-12">
+                                @foreach (var comment in Model.TicketComments.OrderByDescending(c => c.Created))
+                                {
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="row">
+
+                                                @if (!string.IsNullOrEmpty(comment.Author.AvatarUrl))
+                                                {
+                                                    <img class="img-responsive avatar" src="@comment.Author.AvatarUrl" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="@Url.Content("~/Uploads/Default-avatar.jpg")" class="img-responsive avatar" />
+                                                }
+
+                                            </div>
+                                            <div class="row text-center">
+                                                @comment.Author.FullName
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <b>@comment.Created.ToString("MMM d, yyyy")</b>
+                                            </div>
+                                            <div class="row" text-center">
+                                                @Html.Raw(@comment.CommentBody)
+                                            </div>
+                                            @if (User.IsInRole("Admin") || User.Identity.GetUserId() == comment.AuthorId)
+                                            {
+                                                <div class="row">
+                                                    <div class="col-md-offset-6">
+                                                        <a class="dashA" href="@Url.Action("Edit", "TicketComments", new { Id = comment.Id })">Edit</a>|
+                                                        <a class="dashA" href="@Url.Action("Delete", "TicketComments", new { Id = comment.Id })">Delete</a>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <br />
+                                }
+                                <hr />
+
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    using (Html.BeginForm("Create", "TicketComments", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.HiddenFor(model => model.Id)
+                                        @Html.Hidden("TicketId", Model.Id)
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                @Html.TextArea("CommentBody", new { @class = "form-control cell-fill-textarea", rows = 3, cols = 70, placeholder = "Comment" })
+                                            </div>
+                                        </div>
+                                        <div clss="row">
+                                            <div class="col-md-12">
+                                                <button typeof="submit" class="site-btn btn-success">Send</button>
+                                            </div>
+                                        </div>
+
+                                    };
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section class="panel panel-accordion-dark">
+                    <header class="panel-heading">
+                        <div class="panel-actions">
+                            <a href="#" class="fa fa-caret-down"></a>
+                            <a href="#" class="fa fa-times"></a>
+                        </div>
+
+                        <h2 class="panel-title">Ticket Attachment(s)</h2>
+                    </header>
+                    <div class="panel-body">
+                        <!--Top row will be for the entire display-->
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                @if (TicketDecisionHelper.TicketIsEditableByUser(Model))
+                                {
+                                    using (Html.BeginForm("Create", "TicketAttachments", FormMethod.Post, new { enctype = "Multipart/form-data" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.Hidden("TicketId", Model.Id)
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+                                                @Html.TextBox("AttachmentTitle", null, new { @class = "form-control cell-fill-input", placeholder = "Title" })
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+                                                @Html.TextArea("AttachmentDescription", new { @class = "form-control cell-fill-textarea", rows = 3, cols = 70, placeholder = "Description" })
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="file" name="attachment" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button type="submit" class="site-btn btn-success btnPad">Add Attachment</button>
+                                            </div>
+                                        </div>
+
+                                    };
+                                }
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </section>
+            </div>
+
+
+
+            <div class="row">
+                <div class=" panel panel-inverse" data-sortable-id="index-1">
+                    <div class="panel-heading">
+                        <div class="panel-actions">
+                            <a href="#" class="fa fa-caret-down"></a>
+                            <a href="#" class="fa fa-times"></a>
+                        </div>
+                        <h4 class="panel-title">Ticket Attachments</h4>
+                    </div>
+
+                    <div class="panel-body table-responsive" style="max-height:200px;">
+                        <table data-scrollbar="true" scrollCollapse="true" id="TicketHistoriesHeight">
+                            <thead>
+                                <tr>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var attachment in Model.TicketAttachments)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img class="imgsize" src="@ImageHelpers.GetIconPath(attachment.AttachmentUrl)" />
+
+                                            <a target="_blank" href="@attachment.AttachmentUrl">@Path.GetFileNameWithoutExtension(attachment.AttachmentUrl)</a>
+                                        </td>
+                                        <td>
+                                            @attachment.Title
+
+                                        </td>
+
+                                        <td>
+                                            @attachment.Description
+                                        </td>
+
+                                        <td>
+                                            @attachment.User.FullName
+                                        </td>
+                                        <td>
+                                            @attachment.Created.ToString("MMM d, yyyy")
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+
+
+        <div class="col-md-8 hisBox">
+            <!-- begin panel 1: History-->
+            <div class="@*panel*@ panel-inverse" data-sortable-id="index-1">
+                <div class="panel-heading">
+                    <div class="panel-actions">
+                        <i class="fa fa-header"></i>
+                        @*<a href="#" class="fa fa-caret-down"></a>
+                        <a href="#" class="fa fa-times"></a>*@
+                    </div>
+                    <h4 class="panel-title">Ticket History</h4>
+                </div>
+                <!-- begin timeline -->
+                <div class="panel-body table-responsive" style="max-height:900px;">
+                    <table data-scrollbar="true" scrollCollapse="true" id="TicketHistoriesHeight">
+                        <thead>
+                            <tr>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <ul class="timeline">
+                                        @foreach (var history in Model.TicketHistories.OrderByDescending(h => h.Updated))
+                                        {
+                                            <li>
+                                                <!-- begin timeline-time -->
+                                                <div class="timeline-time">
+                                                    <span class="date">
+                                                        @history.Updated.ToString("MMMM d, yyyy")
+                                                    </span>
+                                                    <span class="time">
+                                                        @history.Updated.ToString("HH:MM tt")
+                                                    </span>
+                                                </div>
+                                                <!-- end timeline-time -->
+                                                <!-- begin timeline-icon -->
+                                                <div class="timeline-icon">
+                                                    <a></a>
+                                                </div>
+                                                <!-- end timeline-icon -->
+                                                <!-- begin timeline-body -->
+                                                <div class="timeline-body">
+                                                    <div class="timeline-header">
+                                                        <span class="username">Edit Author:</span>
+                                                        <span class="username pull-right"> @history.User.FullName</span>
+                                                        <span class="userimage pull-right">
+                                                            @if (!string.IsNullOrEmpty(history.User.AvatarUrl))
+                                                            {
+                                                                <img src="@history.User.AvatarUrl" alt="Avatar" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="@Url.Content("~/Uploads/Default-avatar.jpg")" class="img-responsive avatar" />
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                    <div class="timeline-content">
+                                                        <p class="lead">
+                                                            The @history.PropertyName was changed from "@history.OldValue" to "@history.NewValue".
+                                                        </p>
+                                                    </div>
+                                                    <div class="timeline-footer"></div>
+                                                </div>
+                                                <!-- end timeline-body -->
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#TicketHistoriesHeight').DataTable({
+                "scrollY": "500px",
+                "scrollCollapse": true,
+                "paging": false
+            });
+        });
+    </script>
+}
+
+
+
+
